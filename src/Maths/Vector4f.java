@@ -1,4 +1,4 @@
-package Maths;
+package maths;
 
 public class Vector4f {
 

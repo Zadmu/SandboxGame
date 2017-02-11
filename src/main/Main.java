@@ -1,12 +1,8 @@
 package main;
 
-import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.system.MemoryUtil.*;
 import static org.lwjgl.opengl.GL11.*;
 
-import org.lwjgl.opengl.GL;
-
-import Maths.Vector3f;
+import maths.Vector3f;
 
 public class Main {
 
