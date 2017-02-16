@@ -3,6 +3,7 @@ package main;
 import static org.lwjgl.opengl.GL11.*;
 
 import maths.Vector3f;
+import maths.Vector4f;
 
 public class Main {
 
@@ -47,6 +48,7 @@ public class Main {
 		shader.bind();
 		
 		shader.setUniform1i("tex", 0);
+		shader.setUniform4f("u_Color", new Vector4f(Vector4f.FromRGB(150, 235, 122)));
 		
 		float time = 0.0f;
 		

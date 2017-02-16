@@ -36,6 +36,10 @@ public class Vector4f {
 		return this;
 	}
 	
+	public static Vector4f FromRGB(int r, int g, int b){
+		return new Vector4f(r / 255.0f, g / 255.0f, b / 255.0f, 1.0f);
+	}
+	
 	public Vector4f divide(Vector4f other){
 		x /= other.x;
 		y /= other.y;

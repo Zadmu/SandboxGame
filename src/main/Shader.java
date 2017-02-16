@@ -6,6 +6,10 @@ import static org.lwjgl.opengl.GL20.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import maths.Vector2f;
+import maths.Vector3f;
+import maths.Vector4f;
+
 public class Shader {
 	
 	private int shaderID;
@@ -83,6 +87,18 @@ public class Shader {
 	
 	public void setUniform1f(String name, float value){
 		glUniform1f(getUniformLocation(name),value);
+	}
+	
+	public void setUniform2f(String name, Vector2f value){
+		glUniform2f(getUniformLocation(name), value.x, value.y);
+	}
+	
+	public void setUniform3f(String name, Vector3f value){
+		glUniform3f(getUniformLocation(name), value.x, value.y, value.z);
+	}
+	
+	public void setUniform4f(String name, Vector4f value){
+		glUniform4f(getUniformLocation(name), value.x, value.y, value.z, value.w);
 	}
 	
 }
