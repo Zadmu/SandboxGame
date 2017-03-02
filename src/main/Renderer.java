@@ -13,4 +13,9 @@ public class Renderer {
 	public static void setClearColor(float r, float g, float b, float a){
 		glClearColor(r, g, b, a);
 	}		
+	
+	public static void setClearColor(Vector4f color){
+		glClearColor(color.x, color.y, color.z, color.w);
+	}	
+	
 }

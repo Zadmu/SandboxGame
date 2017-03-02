@@ -2,6 +2,7 @@ package main;
 
 import static org.lwjgl.opengl.GL11.*;
 
+import maths.Matrix4f;
 import maths.Vector3f;
 import maths.Vector4f;
 
@@ -50,12 +51,18 @@ public class Main {
 		shader.setUniform1i("tex", 0);
 		shader.setUniform4f("u_Color", new Vector4f(Vector4f.FromRGB(150, 235, 122)));
 		
+		Matrix4f projection = Matrix4f.orthographic(-8.0f, 8.0f, -4.5f, 4.5f, -1, 1);
+		
 		float time = 0.0f;
 		
 		while (!window.closed()) {
 			time += 0.01f;
 			
-			Renderer.setClearColor(0.2f, 0.3f, 0.8f, 1.0f);
+			Matrix4f transform = Matrix4f.translate(new Vector3f(7.5f * (float)Math.sin(time), 4.0f * (float)Math.cos(time), 0));
+			Matrix4f mvp = Matrix4f.identity().multiply(projection).multiply(transform);
+			shader.setUniformMatrix4f("u_ModelViewProjectionMatrix", mvp);
+			
+			Renderer.setClearColor(Vector4f.FromRGB(253, 182, 032));
 			Renderer.clear();
 			
 			shader.setUniform1f("time", time);

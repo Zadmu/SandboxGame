@@ -6,6 +6,7 @@ import static org.lwjgl.opengl.GL20.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import maths.Matrix4f;
 import maths.Vector2f;
 import maths.Vector3f;
 import maths.Vector4f;
@@ -99,6 +100,10 @@ public class Shader {
 	
 	public void setUniform4f(String name, Vector4f value){
 		glUniform4f(getUniformLocation(name), value.x, value.y, value.z, value.w);
+	}
+	
+	public void setUniformMatrix4f(String name, Matrix4f value){
+		glUniformMatrix4fv(getUniformLocation(name), true, value.elements);
 	}
 	
 }
