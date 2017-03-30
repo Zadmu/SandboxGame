@@ -23,8 +23,9 @@ public class Matrix4f {
 				data[col + row * 4] = sum;
 			}
 		}
-		elements = data;
-		return this;
+		Matrix4f result = new Matrix4f();
+		result.elements = data;
+		return result;
 	}
 	
 	public static Matrix4f orthographic(float left, float right, float bottom, float top, float near, float far){
@@ -67,6 +68,32 @@ public class Matrix4f {
 		result.elements[3 + 0 * 4] = translation.x;
 		result.elements[3 + 1 * 4] = translation.y;
 		result.elements[3 + 2 * 4] = translation.z;
+		
+		return result;
+	}
+	
+	public static Matrix4f rotate(float radians, Vector3f axis) {
+		Matrix4f result = identity();
+		
+		float c = (float)Math.cos(radians);
+		float s = (float)Math.sin(radians);
+		float omc = 1.0f - c;
+		
+		float x = axis.x;
+		float y = axis.y;
+		float z = axis.z;
+		
+		result.elements[0 + 0 * 4] = x * x * omc + c;
+		result.elements[0 + 1 * 4] = y * x * omc + z * s;
+		result.elements[0 + 2 * 4] = x * z * omc - y * s;
+		
+		result.elements[1 + 0 * 4] = x * y * omc - z * s;
+		result.elements[1 + 1 * 4] = y * y * omc + c;
+		result.elements[1 + 2 * 4] = y * z * omc + x * s;
+		
+		result.elements[2 + 0 * 4] = x * z * omc + y * s;
+		result.elements[2 + 1 * 4] = y * z * omc - x * s;
+		result.elements[2 + 2 * 4] = z * z * omc + c;
 		
 		return result;
 	}

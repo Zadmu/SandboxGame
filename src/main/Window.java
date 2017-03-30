@@ -4,6 +4,9 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.lwjgl.glfw.GLFWWindowSizeCallbackI;
 import org.lwjgl.opengl.GL;
 
@@ -13,6 +16,8 @@ public class Window {
 	private int width, height;
 	
 	private long handle;
+	
+	private Set<Integer> pressedKeys = new HashSet<Integer>();
 	
 	public Window(String title, int width, int height){
 		this.title = title;
@@ -30,6 +35,13 @@ public class Window {
 		if (handle == NULL)
 			System.err.println("Failed to create window");
 		
+		glfwSetKeyCallback(handle, (window, key, scancode, action, mods) -> {
+			if (action == GLFW_PRESS)
+				pressedKeys.add(key);
+			else if (action == GLFW_RELEASE)
+				pressedKeys.remove(key);
+				});
+		
 		glfwSetWindowSizeCallback(handle, new GLFWWindowSizeCallbackI() {
 			
 			@Override
@@ -43,6 +55,10 @@ public class Window {
 		
 		GL.createCapabilities();
 		System.out.println("OpenGL: " + glGetString(GL_VERSION));
+	}
+	
+	public boolean isKeyPressed(int keycode){
+		return pressedKeys.contains(keycode);
 	}
 	
 	public boolean closed(){

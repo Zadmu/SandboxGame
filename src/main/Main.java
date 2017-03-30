@@ -1,73 +1,58 @@
 package main;
 
-import static org.lwjgl.opengl.GL11.*;
+import org.lwjgl.glfw.GLFW;
 
-import maths.Matrix4f;
 import maths.Vector3f;
 import maths.Vector4f;
 
 public class Main {
 
 	private Window window;
+	private Camera camera;
+	private Vector3f position = new Vector3f();
+	private float speed = 0.2f;
 	
-	public Main() {
+	private void update(){
+		if(window.isKeyPressed(GLFW.GLFW_KEY_RIGHT))
+			position.x += speed;
+		else if (window.isKeyPressed(GLFW.GLFW_KEY_LEFT))
+			position.x -= speed;
 		
-		Vector3f a = new Vector3f(2.0f);
-		Vector3f b = new Vector3f(1, 2, 3);
+		if(window.isKeyPressed(GLFW.GLFW_KEY_UP))
+			position.y += speed;
+		else if (window.isKeyPressed(GLFW.GLFW_KEY_DOWN))
+			position.y -= speed;
 		
-		b.multiply(a);
-		System.out.println(b);
+		camera.setPosition(position);
+		
 	}
 	
+	private void render(){
+		Renderer.setClearColor(Vector4f.FromRGB(150, 235, 122));
+		Renderer.clear();
+
+		float time = Renderer.getTime();
+		Renderer.fillRect(7.5f * (float)Math.sin(time), 4.0f * (float)Math.cos(time), 1, 1, 0.0f,Vector4f.FromRGB(255, 235, 122));
+		//Renderer.fillRect(4.0f, 0.0f, 2, 2, time * 100.0f, Vector4f.FromRGB(255, 0, 255));
+		Renderer.fillRect(0.0f, -2.0f, 2, 2, 45.0f, Vector4f.FromRGB(242, 15, 15));
+		Renderer.fillRect(0.0f, -4.0f, 2.5f, 4.0f, 0.0f, Vector4f.FromRGB(194, 163, 27));
+		Renderer.fillRect(0.0f, -4.0f, 1f, 2.0f, 0.0f, Vector4f.FromRGB(239, 153, 27));
+		
+		Renderer.flush();
+	}
+	public Main() {
+	}
+
 	private void run() {
 		window = new Window("Sandbox", 960, 540);
-		
-		float[] vertices = new float[] {   // short 2 bytes, float integer 4 bytes, long double 8 bytes
-				-0.5f, -0.5f, 0.0f, 0, 1,
-				-0.5f, 0.5f, 0.0f, 0, 0,
-				0.5f, 0.5f, 0.0f, 1, 0,
-				0.5f, -0.5f, 0.0f, 1, 1
-		};
-		
-		short [] indices = new short[] {
-			0,1,2,
-			2,3,0
-		};
-			
-		VertexBuffer vbo = new VertexBuffer(vertices);
-		vbo.bind();
-		vbo.setAttribute(0, 3, GL_FLOAT, 5 * 4, 0);
-		vbo.setAttribute(1, 2, GL_FLOAT, 5 * 4, 3 * 4);
-		
-		IndexBuffer ibo = new IndexBuffer(indices);
-		ibo.bind();
-		
-		Texture texture = new Texture("res/textures/wall.png");
-		texture.bind();
-		
-		Shader shader = new Shader("res/shaders/Basic.vert", "res/shaders/Basic.frag");
-		shader.bind();
-		
-		shader.setUniform1i("tex", 0);
-		shader.setUniform4f("u_Color", new Vector4f(Vector4f.FromRGB(150, 235, 122)));
-		
-		Matrix4f projection = Matrix4f.orthographic(-8.0f, 8.0f, -4.5f, 4.5f, -1, 1);
-		
-		float time = 0.0f;
+		Renderer.init();
+		camera = new Camera(-8.0f, 8.0f, -4.5f, 4.5f);
+		Renderer.setCamera(camera);
 		
 		while (!window.closed()) {
-			time += 0.01f;
 			
-			Matrix4f transform = Matrix4f.translate(new Vector3f(7.5f * (float)Math.sin(time), 4.0f * (float)Math.cos(time), 0));
-			Matrix4f mvp = Matrix4f.identity().multiply(projection).multiply(transform);
-			shader.setUniformMatrix4f("u_ModelViewProjectionMatrix", mvp);
-			
-			Renderer.setClearColor(Vector4f.FromRGB(253, 182, 032));
-			Renderer.clear();
-			
-			shader.setUniform1f("time", time);
-			//All rendering goes here
-			ibo.draw();
+			update();
+			render();
 			
 			window.update();
 		}

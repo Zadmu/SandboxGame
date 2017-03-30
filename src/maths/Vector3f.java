@@ -77,6 +77,10 @@ public class Vector3f {
 		return this;
 	}
 	
+	public Vector3f negate(){
+		return new Vector3f(-x, -y, -z);
+	}
+	
 	public boolean equals(Object object){
 		if (!(object instanceof Vector3f))
 			return false;
